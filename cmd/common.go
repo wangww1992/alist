@@ -17,6 +17,7 @@ func Init() {
 	bootstrap.InitDB()
 	data.InitData()
 	bootstrap.InitIndex()
+	bootstrap.InitDataDB()
 }
 
 var pid = -1

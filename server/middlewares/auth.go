@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"crypto/subtle"
+	"errors"
 
 	"github.com/alist-org/alist/v3/internal/conf"
 	"github.com/alist-org/alist/v3/internal/model"
@@ -14,6 +15,19 @@ import (
 
 // Auth is a middleware that checks if the user is logged in.
 // if token is empty, set user to guest
+var _token = "123"
+
+func EcpanAuth(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	if token != _token {
+		err := errors.New("token is wrong!")
+		common.ErrorResp(c, err, 500)
+		c.Abort()
+		return
+	}
+	c.Next()
+	return
+}
 func Auth(c *gin.Context) {
 	token := c.GetHeader("Authorization")
 	if subtle.ConstantTimeCompare([]byte(token), []byte(setting.GetStr(conf.Token))) == 1 {

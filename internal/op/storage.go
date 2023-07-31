@@ -66,6 +66,35 @@ func CreateStorage(ctx context.Context, storage model.Storage) (uint, error) {
 	return storage.ID, nil
 }
 
+func CreateUserStorageList(stores []model.UserStorage) error {
+	tx := db.GetDb().Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	for i := 0; i < len(stores); i++ {
+		err := db.CreateStorage(&stores[i].Storage)
+		user := getUser(stores[i])
+		e := db.CreateUser(&user)
+		if e != nil || err != nil {
+			return errors.Wrap(err, " failed batch put data")
+		}
+
+	}
+	tx.Commit()
+	return nil
+}
+
+func getUser(userStore model.UserStorage) model.User {
+	return model.User{
+		Username: userStore.UserName,
+		Password: userStore.Password,
+		BasePath: userStore.Storage.MountPath,
+		Role:     2,
+	}
+}
+
 // LoadStorage load exist storage in db to memory
 func LoadStorage(ctx context.Context, storage model.Storage) error {
 	storage.MountPath = utils.FixAndCleanPath(storage.MountPath)

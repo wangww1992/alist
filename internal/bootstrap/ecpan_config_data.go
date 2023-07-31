@@ -1,9 +1,9 @@
 package bootstrap
 
 import (
-	"fmt"
 	"github.com/alist-org/alist/v3/internal/model"
 	"github.com/alist-org/alist/v3/internal/op"
+	log "github.com/sirupsen/logrus"
 	"github.com/tealeg/xlsx"
 	"strconv"
 	"time"
@@ -13,18 +13,15 @@ var (
 	filePath = "C:\\Users\\TONGLIN\\Desktop\\ecpan_user_data.xlsx"
 )
 
-func InitDataDB() error {
+func InitDataDB() {
 	userStorages, err := InitExcelData()
 	if err != nil {
-		fmt.Println(err)
-		return err
+		log.Debugf(err.Error())
 	}
 	e := op.CreateUserStorageList(userStorages)
 	if e != nil {
-		fmt.Println(e)
-		return e
+		log.Fatalf("failed to Inject configuration :%s", err.Error())
 	}
-	return nil
 }
 func InitExcelData() ([]model.UserStorage, error) {
 	var userStorages []model.UserStorage

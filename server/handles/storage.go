@@ -49,6 +49,20 @@ func CreateStorage(c *gin.Context) {
 	}
 }
 
+func CreateStorageList(c *gin.Context) {
+	var req model.StorageList
+	if err := c.ShouldBind(&req); err != nil {
+		common.ErrorResp(c, err, 400)
+		return
+	}
+	if err := op.CreateUserStorageList(req.Storages); err != nil {
+		common.ErrorWithDataResp(c, err, 500, gin.H{}, true)
+	} else {
+		common.SuccessResp(c, 200)
+	}
+
+}
+
 func UpdateStorage(c *gin.Context) {
 	var req model.Storage
 	if err := c.ShouldBind(&req); err != nil {

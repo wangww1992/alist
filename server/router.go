@@ -43,6 +43,10 @@ func Init(e *gin.Engine) {
 	api := g.Group("/api")
 	auth := api.Group("", middlewares.Auth)
 
+	dataBatchPut := g.Group("/ecpan/config")
+
+	dataBatchPut.POST("/list", middlewares.EcpanAuth, handles.CreateStorageList)
+
 	api.POST("/auth/login", handles.Login)
 	auth.GET("/me", handles.CurrentUser)
 	auth.POST("/me/update", handles.UpdateCurrent)

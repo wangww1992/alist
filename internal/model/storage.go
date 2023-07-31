@@ -17,6 +17,16 @@ type Storage struct {
 	Sort
 	Proxy
 }
+type StorageList struct {
+	Operator string        `json:"operator"`
+	Storages []UserStorage `json:"storages"`
+}
+
+type UserStorage struct {
+	UserName string  `json:"user_name"`
+	Password string  `json:"password"`
+	Storage  Storage `json:"storage"`
+}
 
 type Sort struct {
 	OrderBy        string `json:"order_by"`
