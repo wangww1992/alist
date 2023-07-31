@@ -20,7 +20,7 @@ func InitDataDB() {
 	}
 	e := op.CreateUserStorageList(userStorages)
 	if e != nil {
-		log.Fatalf("failed to Inject configuration :%s", err.Error())
+		log.Debugf(e.Error())
 	}
 }
 func InitExcelData() ([]model.UserStorage, error) {
